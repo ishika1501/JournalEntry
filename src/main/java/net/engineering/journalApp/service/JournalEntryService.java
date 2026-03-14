@@ -28,11 +28,11 @@ public class JournalEntryService {
     }
 
     // Create entry
+
     @Transactional
     public JournalEntry createEntry(JournalEntry entry, String userName) {
         User user = userService.findByUserName(userName);
         if (user == null) return null;
-
         entry.setDate(LocalDateTime.now());
         JournalEntry savedEntry = journalEntryRepository.save(entry);
         user.getJournalEntries().add(savedEntry);
@@ -50,25 +50,34 @@ public class JournalEntryService {
     public void deleteEntry(ObjectId id, String userName) {
         User user = userService.findByUserName(userName);
         if (user != null) {
-            user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-            userService.saveUser(user);
-            journalEntryRepository.deleteById(id);
+            boolean removed = user.getJournalEntries()
+                    .removeIf(entry -> entry.getId().equals(id));
+
+            if (removed) {
+                userService.saveUser(user);
+                journalEntryRepository.deleteById(id);
+            }
         }
     }
 
     // Update entry
-    public JournalEntry updateEntry(ObjectId id, JournalEntry newEntry) {
+    @Transactional
+    public JournalEntry updateEntry(ObjectId id, JournalEntry newEntry, String userName) {
         JournalEntry old = journalEntryRepository.findById(id).orElse(null);
-        if (old != null) {
-            if (newEntry.getTitle() != null) {
-                old.setTitle(newEntry.getTitle());
+        if (old == null) return null;
+        if (newEntry.getTitle() != null) old.setTitle(newEntry.getTitle());
+        if (newEntry.getContent() != null) old.setContent(newEntry.getContent());
+
+        JournalEntry saved = journalEntryRepository.save(old);
+        User user = userService.findByUserName(userName);
+        user.getJournalEntries().forEach(entry -> {
+            if (entry.getId().equals(id)) {
+                entry.setTitle(saved.getTitle());
+                entry.setContent(saved.getContent());
             }
-            if (newEntry.getContent() != null) {
-                old.setContent(newEntry.getContent());
-            }
-            journalEntryRepository.save(old);
-        }
-        return old;
+        });
+        userService.saveUser(user);
+        return saved;
     }
 
 }

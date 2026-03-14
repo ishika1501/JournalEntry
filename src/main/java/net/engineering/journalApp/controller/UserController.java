@@ -4,8 +4,6 @@ package net.engineering.journalApp.controller;
 import net.engineering.journalApp.entity.User;
 import net.engineering.journalApp.repository.UserRepository;
 import net.engineering.journalApp.service.UserService;
-import org.bson.types.ObjectId;
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +31,7 @@ public class UserController {
         User userIndb = userService.findByUserName(name);
         userIndb.setUserName(user.getUserName());
         userIndb.setPassword(user.getPassword());
-        userService.saveUser(userIndb);
+        userService.saveNewUser(userIndb);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

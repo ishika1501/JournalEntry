@@ -48,44 +48,50 @@ public class JourneyEntryControllerV2 {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Get journal by ID
+    // Get journal by ID for a user
     @GetMapping("/id/{id}")
     public ResponseEntity<JournalEntry> getById(@PathVariable ObjectId id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
-        List<JournalEntry> entries = user.getJournalEntries()
+        boolean exists = user.getJournalEntries()
                 .stream()
-                .filter(x -> x.getId().equals(id))
-                .collect(Collectors.toList());
-
-        if (!entries.isEmpty()) {
+                .anyMatch(x -> x.getId().equals(id));
+        if(exists) {
             JournalEntry entry = journalEntryService.getById(id);
             return ResponseEntity.ok(entry);
         }
         return ResponseEntity.notFound().build();
     }
 
-    // Delete journal
-    @DeleteMapping("/id/{userName}/{id}")
-    public ResponseEntity<?> deleteEntry(@PathVariable ObjectId id,
-                                         @PathVariable String userName) {
-
+    // Delete journal for a user
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<?> deleteEntry(@PathVariable ObjectId id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
         journalEntryService.deleteEntry(id, userName);
-
         return ResponseEntity.noContent().build();
     }
 
-    // Update journal
+    // Update journal by ID for a user
     @PutMapping("/id/{id}")
     public ResponseEntity<?> updateEntry(@PathVariable ObjectId id,
                                          @RequestBody JournalEntry entry) {
 
-        JournalEntry updated = journalEntryService.updateEntry(id, entry);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
-        if (updated == null) {
+        User user = userService.findByUserName(userName);
+
+        boolean exists = user.getJournalEntries()
+                .stream()
+                .anyMatch(x -> x.getId().equals(id));
+
+        if (!exists) {
             return ResponseEntity.notFound().build();
         }
+
+        JournalEntry updated = journalEntryService.updateEntry(id, entry, userName);
 
         return ResponseEntity.ok(updated);
     }
