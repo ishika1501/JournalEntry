@@ -21,7 +21,7 @@ public class User {
 
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
-    private List<String>roles= new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
 
     public List<String> getRoles() {
         return roles;
