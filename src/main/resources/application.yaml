@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      # uri: mongodb://localhost:27017/newDatbase
+      uri: mongodb+srv://ishika15raj_db_user:QjUWdrwsYuD2Yhkk@cluster0.9xw1bvw.mongodb.net/journaldb?retryWrites=true&w=majority
+      database: journaldb
+      auto-index-creation: true

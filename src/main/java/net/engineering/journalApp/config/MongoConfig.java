@@ -18,11 +18,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    @Value("${spring.data.mongodb.uri:mongodb://localhost/newDb}")
+    @Value("${spring.data.mongodb.uri}")
     private String mongoUri;
 
     @Value("${spring.data.mongodb.database}")
     private String databaseName;
+
 
     @PostConstruct
     public void init() {
