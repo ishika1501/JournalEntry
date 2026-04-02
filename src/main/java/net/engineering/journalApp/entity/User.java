@@ -18,6 +18,24 @@ public class User {
     private String userName;
 
     private String password;
+    private String email;
+    private boolean sentimentAnalysis;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isSentimentAnalysis() {
+        return sentimentAnalysis;
+    }
+
+    public void setSentimentAnalysis(boolean sentimentAnalysis) {
+        this.sentimentAnalysis = sentimentAnalysis;
+    }
 
     private List<JournalEntry> journalEntries = new ArrayList<>();
 

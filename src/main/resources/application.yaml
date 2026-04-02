@@ -5,3 +5,24 @@ spring:
       uri: mongodb+srv://ishika15raj_db_user:QjUWdrwsYuD2Yhkk@cluster0.9xw1bvw.mongodb.net/journaldb?retryWrites=true&w=majority
       database: journaldb
       auto-index-creation: true
+
+    redis:
+      uri: redis://default:1Y3iYQUop7okhKQM2x4tjKhD8aPlJL39@redis-18655.crce179.ap-south-1-1.ec2.cloud.redislabs.com:18655
+#      host: localhost
+#      port: 6379
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ishika15raj@gmail.com
+    password: pprh vplk bkli ihzn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000

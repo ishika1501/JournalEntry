@@ -3,6 +3,8 @@ package net.engineering.journalApp.service;
 import net.engineering.journalApp.entity.User;
 import net.engineering.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +22,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     public void saveNewUser(User user) {
-        user.setPassword(passwordencode.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER"));
-        userRepository.save(user);
+        try {
+            user.setPassword(passwordencode.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
+            userRepository.save(user);
+            System.out.println("User saved successfully!");
+        } catch (Exception e) {
+            logger.info("Duplicate User" , e);
+        }
     }
 
     public void saveUser(User user){
