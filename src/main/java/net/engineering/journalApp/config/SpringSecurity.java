@@ -27,7 +27,12 @@ public class SpringSecurity {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers(
+                                "/public/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/journal/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -37,6 +42,8 @@ public class SpringSecurity {
 
         return http.build();
     }
+
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {

@@ -1,6 +1,7 @@
 package net.engineering.journalApp.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.engineering.journalApp.entity.User;
 import net.engineering.journalApp.repository.UserRepository;
 import net.engineering.journalApp.service.UserService;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name="User APIs")
 public class UserController {
     @Autowired
     private UserService userService;
